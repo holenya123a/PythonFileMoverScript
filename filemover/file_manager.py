@@ -1,3 +1,4 @@
+import hashlib
 import shutil
 import os
 
@@ -16,14 +17,45 @@ class FileHandler:
         os.remove(self.dir_path)
 
     def search_duplicates(self, files_list):
-        print(type(files_list))
+        for file in files_list:
+            file_path = os.path.join(self.dir_path, file)
+    
+    # Function to create hash
+    def create_hash(self, file):
+        afile = open(os.path.join(self.dir_path, file), 'rb')
+        
+        hasher = hashlib.md5()
+        blocksize=65536
+        buffer = afile.read(blocksize)
 
+        while len(buffer) > 0:
+            hasher.update(buffer)
+            buffer = afile.read(blocksize)
+    
+        afile.close()
+    
+        return hasher.hexdigest()
+    
     def remove_duplicates(self):
-        print('hello')
+        print('remove')
 
+    def get_weigth_and_compare(self, file_names: list):
+        sizes: list = []
+        same_file = True
+        for file in file_names:
+            full_path = os.path.join(self.dir_path,file)
+            try:
+                size = os.path.getsize(full_path)
+            except OSError:
+                print('cant obtain the weigth of the file')
+                pass
 
-file_handler = FileHandler(os.environ['DIR_PATH'])
-print(file_handler.dir_path)
-dir_path = file_handler.dir_path
-list_of_files = file_handler.list_dirs()
-print(list_of_files)
+            if len(sizes) > 0:
+                if size in sizes:
+                    sizes.append(size)
+                else:
+                    same_file = False
+                    return same_file
+            else:
+                sizes.append(size)
+        return same_file
