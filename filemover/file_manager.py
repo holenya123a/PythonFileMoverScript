@@ -15,10 +15,6 @@ class FileHandler:
 
     def delete_file(self):
         os.remove(self.dir_path)
-
-    def search_duplicates(self, files_list):
-        for file in files_list:
-            file_path = os.path.join(self.dir_path, file)
     
     # Function to create hash
     def create_hash(self, file):
@@ -36,7 +32,7 @@ class FileHandler:
     
         return hasher.hexdigest()
     
-    def remove_duplicates(self):
+    def remove_file(self):
         print('remove')
 
     def get_weigth_and_compare(self, file_names: list):
