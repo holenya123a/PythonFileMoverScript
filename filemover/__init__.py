@@ -1,6 +1,5 @@
 from file_manager import FileHandler
 import argparse
-import pprint
 import os
 
 
@@ -17,11 +16,20 @@ def main(path=None):
         try:
             path = os.environ['DIR_PATH']
         except KeyError:
-            pprint.pprint(
+            print(
                 "The environment variable 'DIR_PATH' is not defined.")
             return
+
     files_info = get_duplicates_files(path)
-    pprint.pprint(files_info)
+    print_duplicates(files_info)
+    print_options()
+
+    choice = input('\nDo you want to (m)ove or (d)elete these files?\n')
+    choice = int(choice)
+
+    match choice:
+        case 1:
+            print('DELETE')
 
 
 def get_duplicates_files(path: str):
@@ -45,6 +53,25 @@ def get_duplicates_files(path: str):
         del files_info[key]
 
     return files_info
+
+
+def print_options():
+    print('\n   ---------OPTIONS----------')
+    print('\n   1. DELETE DUPLICATES')
+    print('\n   2. MOVE DUPLICATES')
+    print('\n   3. EXIT')
+
+
+def print_duplicates(files_info: dict):
+    value: str = ''
+    print('\n   -----DUPLICATED FILES-----')
+    for key in files_info:
+        for name in files_info[key]:
+            value += f'{name}, '
+            value = value[:-2]
+            print(f'\n   {value}')
+            value = ''
+    print('\n   --------------------------')
 
 
 args = parser.parse_args()
