@@ -23,16 +23,25 @@ def main(path=None):
                 "The environment variable 'DIR_PATH' is not defined.")
             return
 
-    files_info = get_duplicates_files(path)
+    files_info, file_handler = get_duplicates_files(path)
     print_duplicates(files_info)
     print_options()
 
     choice = input('\nDo you want to (m)ove or (d)elete these files?\n')
     choice = int(choice)
+    last_files: list = []
 
     match choice:
         case 1:
-            print('DELETE')
+
+            for key in files_info:
+                value = files_info[key]
+                last_value = file_handler.get_last_recent(value)
+                last_files.append(last_value)
+            for key in files_info:
+                value = files_info[key]
+                response = file_handler.delete_file(value, last_files)
+                print(response)
         case 2:
             print('MOVE FILES')
         case 3:
@@ -60,7 +69,7 @@ def get_duplicates_files(path: str):
     for key in keys_to_delete:
         del files_info[key]
 
-    return files_info
+    return files_info, file_handler
 
 
 args = parser.parse_args()

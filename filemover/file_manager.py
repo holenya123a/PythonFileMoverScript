@@ -56,7 +56,7 @@ class FileHandler:
         # Return the hexadecimal digest of the hash
         return hasher.hexdigest()
 
-    def delete_file(self, file_name: str):
+    def delete_file(self, files: str, last_files: list):
         '''
         Removes a file given its filename.
         Parameters:
@@ -64,15 +64,21 @@ class FileHandler:
         Returns:
         str -- A message indicating the status of the file deletion.
         '''
-        try:
-            os.remove(os.path.join(self.dir_path, file_name))
-            return f'File({file_name}) deleted successfully.'
+        for file_name in files:
+            try:
 
-        except FileNotFoundError:
-            return f'No such file {file_name} exists.'
+                if os.path.join(self.dir_path, file_name) not in last_files:
+                    os.remove(os.path.join(self.dir_path, file_name))
+                    return f'\nFile({file_name}) deleted successfully.'
+                else:
+                    continue
 
-        except PermissionError:
-            return f'You do not have permission to delete file: {file_name}'
+            except FileNotFoundError:
+                return print(f'\nNo such file {file_name} exists.')
+
+            except PermissionError:
+                msg = '\nYou do not have permission to delete file:'
+                return print(msg, file_name)
 
     def get_weigth_and_compare(self, file_names: list):
         '''
@@ -121,3 +127,10 @@ class FileHandler:
 
         # Return the same_file flag
         return same_file
+
+    def get_last_recent(self, files: list):
+        files_with_path: list = []
+        for file in files:
+            file_with_path = os.path.join(self.dir_path, file)
+            files_with_path.append(file_with_path)
+        return max(files_with_path, key=os.path.getctime)
