@@ -21,15 +21,15 @@ class FileHandler:
         '''
         return os.listdir(self.dir_path)
 
-    def move_file(self, destination_path):
+    def move_file(self, file_name, destination_path):
         '''
         Move the files in the directory to a specified destination.
         Parameters:
         destination_path (str): The path to move the files to.
         '''
-        shutil.move(self.dir_path, destination_path)
+        shutil.move(os.path.join(self.dir_path, file_name), destination_path)
+        return f'File moved to : {self.dir_path}/{file_name}'
 
-    # Function to create hash
     def create_hash(self, file: str):
         '''
         Create the MD5 hash of a file.
