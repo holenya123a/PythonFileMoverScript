@@ -64,12 +64,12 @@ class FileHandler:
         Returns:
         str -- A message indicating the status of the file deletion.
         '''
+
         for file_name in files:
             try:
-
-                if os.path.join(self.dir_path, file_name) not in last_files:
+                if file_name not in last_files:
                     os.remove(os.path.join(self.dir_path, file_name))
-                    return f'\nFile({file_name}) deleted successfully.'
+                    print(f'\nFile({file_name}) deleted successfully.')
                 else:
                     continue
 
@@ -129,8 +129,17 @@ class FileHandler:
         return same_file
 
     def get_last_recent(self, files: list):
+        """
+        Returns the name of the most recently modified file
+        from a list of file names.
+        Args:
+            files (list): A list of file names.
+        Returns:
+            str: The name of the most recently modified file.
+        """
         files_with_path: list = []
         for file in files:
             file_with_path = os.path.join(self.dir_path, file)
             files_with_path.append(file_with_path)
-        return max(files_with_path, key=os.path.getctime)
+        last_file = max(files_with_path, key=os.path.getctime)
+        return os.path.basename(last_file)

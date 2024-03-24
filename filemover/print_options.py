@@ -15,3 +15,7 @@ def print_duplicates(files_info: dict):
             print(f'\n   {value}')
             value = ''
     print('\n   --------------------------')
+
+
+def print_exit():
+    print('\n   -----NO DUPLICATED FILES-----')
