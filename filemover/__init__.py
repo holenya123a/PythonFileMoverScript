@@ -52,7 +52,12 @@ def main(path=None):
                 response = file_handler.delete_file(value, last_files)
                 print(response)
         case 2:
-            print('MOVE FILES')
+            destination_dir = input(
+                '\nWrite the full path to the destination folder:\n')
+            for key in files_info:
+                value = files_info[key]
+                for file in value:
+                    file_handler.move_file(file, destination_dir)
         case 3:
             print('\n   ----------BYE-------------')
             sys.exit()

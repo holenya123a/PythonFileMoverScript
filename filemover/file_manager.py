@@ -4,40 +4,40 @@ import os
 
 
 class FileHandler:
-    '''
+    """
     A class to handle files in a directory.
     Attributes:
     dir_path (str): The path to the directory where files are handled.
-    '''
+    """
 
     def __init__(self, dir_path: str):
         self.dir_path = dir_path
 
     def list_files(self):
-        '''
+        """
         List all files in the directory.
         Returns:
         list: A list of filenames in the directory.
-        '''
+        """
         return os.listdir(self.dir_path)
 
     def move_file(self, file_name, destination_path):
-        '''
+        """
         Move the files in the directory to a specified destination.
         Parameters:
         destination_path (str): The path to move the files to.
-        '''
+        """
         shutil.move(os.path.join(self.dir_path, file_name), destination_path)
         return f'File moved to : {self.dir_path}/{file_name}'
 
     def create_hash(self, file: str):
-        '''
+        """
         Create the MD5 hash of a file.
         Parameters:
         file (str): The name of the file for which to create the hash.
         Returns:
         str: The MD5 hash of the file.
-        '''
+        """
         # Open the file in binary mode
         with open(os.path.join(self.dir_path, file), 'rb') as afile:
             # Initialize the MD5 hasher
@@ -57,13 +57,13 @@ class FileHandler:
         return hasher.hexdigest()
 
     def delete_file(self, files: str, last_files: list):
-        '''
+        """
         Removes a file given its filename.
         Parameters:
         file_name (str) -- The name of the file to be removed.
         Returns:
         str -- A message indicating the status of the file deletion.
-        '''
+        """
 
         for file_name in files:
             try:
@@ -81,7 +81,7 @@ class FileHandler:
                 return print(msg, file_name)
 
     def get_weigth_and_compare(self, file_names: list):
-        '''
+        """
         Compare the sizes of files given their filenames.
 
         Parameters:
@@ -89,7 +89,7 @@ class FileHandler:
 
         Returns:
         bool: True if all files have the same size, False otherwise.
-        '''
+        """
         # Initialize an empty list to store file sizes
         sizes: list = []
 
