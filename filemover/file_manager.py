@@ -4,40 +4,40 @@ import os
 
 
 class FileHandler:
-    '''
+    """
     A class to handle files in a directory.
     Attributes:
     dir_path (str): The path to the directory where files are handled.
-    '''
+    """
 
     def __init__(self, dir_path: str):
         self.dir_path = dir_path
 
     def list_files(self):
-        '''
+        """
         List all files in the directory.
         Returns:
         list: A list of filenames in the directory.
-        '''
+        """
         return os.listdir(self.dir_path)
 
     def move_file(self, file_name, destination_path):
-        '''
+        """
         Move the files in the directory to a specified destination.
         Parameters:
         destination_path (str): The path to move the files to.
-        '''
+        """
         shutil.move(os.path.join(self.dir_path, file_name), destination_path)
         return f'File moved to : {self.dir_path}/{file_name}'
 
     def create_hash(self, file: str):
-        '''
+        """
         Create the MD5 hash of a file.
         Parameters:
         file (str): The name of the file for which to create the hash.
         Returns:
         str: The MD5 hash of the file.
-        '''
+        """
         # Open the file in binary mode
         with open(os.path.join(self.dir_path, file), 'rb') as afile:
             # Initialize the MD5 hasher
@@ -56,26 +56,32 @@ class FileHandler:
         # Return the hexadecimal digest of the hash
         return hasher.hexdigest()
 
-    def delete_file(self, file_name: str):
-        '''
+    def delete_file(self, files: str, last_files: list):
+        """
         Removes a file given its filename.
         Parameters:
         file_name (str) -- The name of the file to be removed.
         Returns:
         str -- A message indicating the status of the file deletion.
-        '''
-        try:
-            os.remove(os.path.join(self.dir_path, file_name))
-            return f'File({file_name}) deleted successfully.'
+        """
 
-        except FileNotFoundError:
-            return f'No such file {file_name} exists.'
+        for file_name in files:
+            try:
+                if file_name not in last_files:
+                    os.remove(os.path.join(self.dir_path, file_name))
+                    print(f'\nFile({file_name}) deleted successfully.')
+                else:
+                    continue
 
-        except PermissionError:
-            return f'You do not have permission to delete file: {file_name}'
+            except FileNotFoundError:
+                return print(f'\nNo such file {file_name} exists.')
+
+            except PermissionError:
+                msg = '\nYou do not have permission to delete file:'
+                return print(msg, file_name)
 
     def get_weigth_and_compare(self, file_names: list):
-        '''
+        """
         Compare the sizes of files given their filenames.
 
         Parameters:
@@ -83,7 +89,7 @@ class FileHandler:
 
         Returns:
         bool: True if all files have the same size, False otherwise.
-        '''
+        """
         # Initialize an empty list to store file sizes
         sizes: list = []
 
@@ -121,3 +127,19 @@ class FileHandler:
 
         # Return the same_file flag
         return same_file
+
+    def get_last_recent(self, files: list):
+        """
+        Returns the name of the most recently modified file
+        from a list of file names.
+        Args:
+            files (list): A list of file names.
+        Returns:
+            str: The name of the most recently modified file.
+        """
+        files_with_path: list = []
+        for file in files:
+            file_with_path = os.path.join(self.dir_path, file)
+            files_with_path.append(file_with_path)
+        last_file = max(files_with_path, key=os.path.getctime)
+        return os.path.basename(last_file)
