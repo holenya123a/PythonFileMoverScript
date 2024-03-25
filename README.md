@@ -20,7 +20,7 @@
 
 ## Examples
 1. To detect duplicates in a specific directory:
-poetry run python __init__.py -p /path/to/directory
+poetry run python __main__.py -p /path/to/directory
 
 2. To run the script without specifying a directory (uses environment variable DIR_PATH if defined):
 
